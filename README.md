@@ -356,6 +356,38 @@ class PayPalPayment implements Payment {
 - `CheckoutService.ts` — demo usage
 - `WithoutOpenClosed.ts` — anti-pattern example (needs modification for new methods)
 
+#### ✅ L — Liskov Substitution Principle (LSP)
+
+**Location:** `src/SOLID/LiskovSubstitution/`
+
+**What we learned:**
+
+- **Subtypes must keep promises of supertypes**: if code expects a `Bird` that can fly, every subtype used in that place must really behave like a flying bird.
+- **Don’t lie with inheritance**: avoid child classes that override methods in a way that breaks expectations (e.g. a `Penguin` that “flies” but actually can’t).
+- **Model abilities explicitly**: split capabilities into more precise types (e.g. `Bird` vs `FlyingBird`) so you only use each subtype where it is truly valid.
+
+**Files:**
+
+- `LSP.ts` — correct design with `Bird`, `FlyingBird`, `Sparrow`, `Penguin`
+- `LSPDemo.ts` — story-style demo (`runLSPDemo()`)
+- `WithoutLSP.ts` — anti-pattern example with a non-flying `Penguin` that still extends `Bird`
+
+#### ✅ I — Interface Segregation Principle (ISP)
+
+**Location:** `src/SOLID/InterfaceSegregation/`
+
+**What we learned:**
+
+- **Small, focused interfaces**: give each client only the methods it really needs instead of one giant interface.
+- **Avoid “fat” interfaces**: big interfaces force classes to implement unused methods, leading to fake/empty implementations and confusion.
+- **Design by role**: split abilities into tiny interfaces (`CanWalk`, `CanTalk`, `CanTakePhoto`) and compose them per need (robot dog vs camera toy).
+
+**Files:**
+
+- `ISP.ts` — good design with small capability interfaces and `RobotDog` / `CameraToy`
+- `ISPDemo.ts` — story-style demo (`runISPDemo()`)
+- `WithoutISP.ts` — anti-pattern with a single `SuperToy` interface and a bloated implementation
+
 ### 🚗 Comprehensive Example: Ride Booking System
 
 **Location:** `src/Class Relationships/BuildingRiderSystem/`
@@ -480,8 +512,8 @@ The next phase will cover SOLID principles and other fundamental design principl
 
 - [x] **S**ingle Responsibility Principle (SRP)
 - [x] **O**pen/Closed Principle (OCP)
-- [ ] **L**iskov Substitution Principle (LSP)
-- [ ] **I**nterface Segregation Principle (ISP)
+- [x] **L**iskov Substitution Principle (LSP)
+- [x] **I**nterface Segregation Principle (ISP)
 - [ ] **D**ependency Inversion Principle (DIP)
 - [ ] DRY (Don't Repeat Yourself)
 - [ ] KISS (Keep It Simple, Stupid)
