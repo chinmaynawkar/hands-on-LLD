@@ -80,26 +80,28 @@ Learn how to properly encapsulate data and behavior within classes.
 - **Good Example:** `GoodBankAccount.ts` - Shows proper encapsulation with private fields and controlled access
 
 **Key Concepts:**
+
 - Private fields and methods
 - Public getters/setters
 - Data validation
 - Business rule enforcement
 
 **Example:**
+
 ```typescript
 // ❌ Bad: Public field allows invalid states
 class BadBankAccount {
-    balance: number = 0; // Anyone can set this to -1000!
+  balance: number = 0; // Anyone can set this to -1000!
 }
 
 // ✅ Good: Encapsulated with validation
 class GoodBankAccount {
-    private balance: number = 0;
-    
-    public deposit(amount: number): void {
-        if (amount <= 0) throw new Error("Amount must be positive");
-        this.balance += amount;
-    }
+  private balance: number = 0;
+
+  public deposit(amount: number): void {
+    if (amount <= 0) throw new Error("Amount must be positive");
+    this.balance += amount;
+  }
 }
 ```
 
@@ -114,23 +116,25 @@ Understand how to hide implementation details and expose only what's necessary.
 - **Logger:** `Logger.ts` - Abstraction example for logging
 
 **Key Concepts:**
+
 - Interface-based design
 - Implementation hiding
 - Contract definition
 - Polymorphism through interfaces
 
 **Example:**
+
 ```typescript
 // Abstraction: What can be done, not how
 interface Notifier {
-    send(message: string): void;
+  send(message: string): void;
 }
 
 // Implementation: How it's done
 class EmailNotifier implements Notifier {
-    send(message: string): void {
-        console.log(`Sending email: ${message}`);
-    }
+  send(message: string): void {
+    console.log(`Sending email: ${message}`);
+  }
 }
 ```
 
@@ -151,15 +155,16 @@ This module covers the five fundamental relationships in OOP, demonstrated throu
 ```typescript
 // Ride knows about Driver (association)
 class Ride {
-    private driverId?: string; // Associated, not owned
-    
-    public assignDriver(driverId: string): void {
-        this.driverId = driverId;
-    }
+  private driverId?: string; // Associated, not owned
+
+  public assignDriver(driverId: string): void {
+    this.driverId = driverId;
+  }
 }
 ```
 
 **Key Points:**
+
 - Objects can exist independently
 - Relationship is temporary or optional
 - No ownership implied
@@ -173,30 +178,32 @@ class Ride {
 **Definition:** A "has-a" relationship where the whole contains parts, but parts can exist without the whole.
 
 **Examples:**
+
 - `Order` aggregates `Item[]` - Items can exist without an Order
 - `Team` aggregates `Developer[]` - Developers can exist without a Team
 
 ```typescript
 // Order aggregates Items (items can exist independently)
 class Order {
-    private items: Item[] = [];
-    
-    public addItem(item: Item): void {
-        this.items.push(item); // Item exists independently
-    }
+  private items: Item[] = [];
+
+  public addItem(item: Item): void {
+    this.items.push(item); // Item exists independently
+  }
 }
 
 // Team aggregates Developers
 class Team {
-    private developers: Developer[] = [];
-    
-    public addDeveloper(developer: Developer): void {
-        this.developers.push(developer);
-    }
+  private developers: Developer[] = [];
+
+  public addDeveloper(developer: Developer): void {
+    this.developers.push(developer);
+  }
 }
 ```
 
 **Key Points:**
+
 - "Has-a" relationship
 - Parts can exist independently
 - Whole doesn't create parts
@@ -215,20 +222,21 @@ class Team {
 ```typescript
 // House composes Rooms (rooms cannot exist without house)
 class House {
-    private rooms: Room[] = [];
-    
-    constructor() {
-        // Composition: House CREATES its rooms
-        this.rooms = [
-            new Room("Living Room"),
-            new Room("Kitchen"),
-            new Room("Bedroom")
-        ];
-    }
+  private rooms: Room[] = [];
+
+  constructor() {
+    // Composition: House CREATES its rooms
+    this.rooms = [
+      new Room("Living Room"),
+      new Room("Kitchen"),
+      new Room("Bedroom"),
+    ];
+  }
 }
 ```
 
 **Key Points:**
+
 - "Owns-a" relationship
 - Parts are created by the whole
 - Parts cannot exist independently
@@ -247,19 +255,20 @@ class House {
 ```typescript
 // RideService depends on MatchingService
 class RideService {
-    constructor(
-        private matchingService: MatchingService // Dependency injection
-    ) {}
-    
-    requestRide(input: RideInput): Ride {
-        // Uses MatchingService temporarily
-        const driver = this.matchingService.findNearestDriver(input.pickup);
-        // ...
-    }
+  constructor(
+    private matchingService: MatchingService // Dependency injection
+  ) {}
+
+  requestRide(input: RideInput): Ride {
+    // Uses MatchingService temporarily
+    const driver = this.matchingService.findNearestDriver(input.pickup);
+    // ...
+  }
 }
 ```
 
 **Key Points:**
+
 - Temporary usage relationship
 - Often through method parameters or constructor injection
 - No permanent ownership
@@ -278,30 +287,74 @@ class RideService {
 ```typescript
 // Interface defines the contract
 interface Payment {
-    pay(amount: number): void;
+  pay(amount: number): void;
 }
 
 // Classes realize the interface
 class CreditCardPayment implements Payment {
-    pay(amount: number): void {
-        console.log(`Paying ${amount} with credit card`);
-    }
+  pay(amount: number): void {
+    console.log(`Paying ${amount} with credit card`);
+  }
 }
 
 class PayPalPayment implements Payment {
-    pay(amount: number): void {
-        console.log(`Paying ${amount} with PayPal`);
-    }
+  pay(amount: number): void {
+    console.log(`Paying ${amount} with PayPal`);
+  }
 }
 ```
 
 **Key Points:**
+
 - "Implements" relationship
 - Contract definition through interfaces
 - Multiple classes can realize the same interface
 - Enables polymorphism
 
 ---
+
+### 3. SOLID Principles
+
+**Location:** `src/SOLID/`
+
+#### ✅ S — Single Responsibility Principle (SRP)
+
+**Location:** `src/SOLID/SingleResPrinciple/`
+
+**What we learned:**
+
+- **One reason to change**: keep each class focused on a single responsibility (persistence vs calculation vs formatting vs delivery).
+- **Better testing & change isolation**: you can change email logic without touching salary calculation (and vice-versa).
+- **Clean entry point**: keep demos/orchestration in a single `run...()` function and call it from `src/index.ts`.
+
+**Files:**
+
+- `SRP.ts` — `Employee` entity (data + getters)
+- `EmpRepo.ts` — `EmployeeRepository` (persistence)
+- `PaySlipCalc.ts` — net pay calculation
+- `PayslipGen.ts` — payslip formatting
+- `EmailPayslip.ts` — email sending
+- `SRPDemo.ts` — orchestration (`runSRPDemo()`)
+
+#### ✅ O — Open/Closed Principle (OCP)
+
+**Location:** `src/SOLID/OpenClosed/`
+
+**What we learned:**
+
+- **Open for extension, closed for modification**: `PaymentProcessor` depends on the `PaymentMethod` interface, so new payment types don’t require editing the processor.
+- **Add new behavior by adding a class**: to support UPI, we add `UPIPayment implements PaymentMethod` (no `if/else`, no `switch` in the processor).
+- **Important TypeScript pitfall**: a `.ts` file with **no imports/exports** is treated as a **script**, which can leak declarations into the global scope.
+  - We hit this because `src/Class Relationships/Realization.ts` defines global `CreditCardPayment`/`PayPalPayment` with `pay()`, while OCP expects `processPayment()`.
+  - Fix: in OCP usage files, **import concrete implementations from the correct module** (`./OnlinePayment`) so they correctly satisfy `PaymentMethod`.
+
+**Files:**
+
+- `PaymentMethod.ts` — interface/contract
+- `PaymentProcessor.ts` — uses `PaymentMethod` (stable code)
+- `OnlinePayment.ts` — concrete implementations (`CreditCardPayment`, `PayPalPayment`, `UPIPayment`)
+- `CheckoutService.ts` — demo usage
+- `WithoutOpenClosed.ts` — anti-pattern example (needs modification for new methods)
 
 ### 🚗 Comprehensive Example: Ride Booking System
 
@@ -343,13 +396,13 @@ BuildingRiderSystem/
 
 #### Relationships Demonstrated
 
-| Relationship | Example | File |
-|-------------|---------|------|
-| **Association** | `Ride` ↔ `Driver` | `entities/RideStrict.ts` |
-| **Aggregation** | `MatchingService` has `Driver[]` | `services/MatchingService.ts` |
-| **Composition** | `Ride` owns `RideEvent[]` | `entities/RideStrict.ts` |
-| **Dependency** | `RideService` uses `MatchingService` | `services/RideService.ts` |
-| **Realization** | `UPIPayment` implements `PaymentMethod` | `services/payments/` |
+| Relationship    | Example                                 | File                          |
+| --------------- | --------------------------------------- | ----------------------------- |
+| **Association** | `Ride` ↔ `Driver`                       | `entities/RideStrict.ts`      |
+| **Aggregation** | `MatchingService` has `Driver[]`        | `services/MatchingService.ts` |
+| **Composition** | `Ride` owns `RideEvent[]`               | `entities/RideStrict.ts`      |
+| **Dependency**  | `RideService` uses `MatchingService`    | `services/RideService.ts`     |
+| **Realization** | `UPIPayment` implements `PaymentMethod` | `services/payments/`          |
 
 #### Features
 
@@ -367,19 +420,19 @@ BuildingRiderSystem/
 ```typescript
 // See src/index.ts for complete example
 const ride = rideService.requestRide({
-    rideId: "ride-101",
-    riderId: rider.getId(),
-    pickup: new Location(19.08, 72.88),
-    drop: new Location(19.1, 72.9),
+  rideId: "ride-101",
+  riderId: rider.getId(),
+  pickup: new Location(19.08, 72.88),
+  drop: new Location(19.1, 72.9),
 });
 
 rideService.startRide(ride.getId());
 rideService.completeRide(ride.getId());
 
 const receipt = paymentService.payForRide({
-    rideId: ride.getId(),
-    durationMin: 18,
-    method: new UPIPayment(), // 🔥 Polymorphism in action
+  rideId: ride.getId(),
+  durationMin: 18,
+  method: new UPIPayment(), // 🔥 Polymorphism in action
 });
 ```
 
@@ -425,8 +478,8 @@ Low Level Design/
 
 The next phase will cover SOLID principles and other fundamental design principles:
 
-- [ ] **S**ingle Responsibility Principle (SRP)
-- [ ] **O**pen/Closed Principle (OCP)
+- [x] **S**ingle Responsibility Principle (SRP)
+- [x] **O**pen/Closed Principle (OCP)
 - [ ] **L**iskov Substitution Principle (LSP)
 - [ ] **I**nterface Segregation Principle (ISP)
 - [ ] **D**ependency Inversion Principle (DIP)
@@ -451,7 +504,7 @@ By completing this repository, you will:
 ✅ Apply design principles in real-world scenarios  
 ✅ Build maintainable, scalable, and testable code  
 ✅ Understand when to use each relationship type  
-✅ Design systems with proper separation of concerns  
+✅ Design systems with proper separation of concerns
 
 ---
 
